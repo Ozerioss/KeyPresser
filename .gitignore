@@ -3,6 +3,8 @@
 # Packages
 /dist/*
 
+build/
+
 # Unit test / coverage reports
 .coverage
 .pytest_cache
