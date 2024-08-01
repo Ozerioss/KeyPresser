@@ -12,6 +12,12 @@ def get_active_window_title():
 
 class KeyPresserApp:
     def __init__(self, root):
+        self.thread = threading.Thread(target=self.press_keys)
+        self.keys_listbox = tk.Listbox(self.root)
+        self.stop_button = tk.Button(self.root, text="Stop (F4)", command=self.stop_pressing)
+        self.start_button = tk.Button(self.root, text="Start (F3)", command=self.start_pressing)
+        self.add_key_button = tk.Button(self.root, text="Add Key", command=self.add_key)
+        self.key_entry = tk.Entry(self.root)
         self.root = root
         self.root.title("Key Presser App")
 
@@ -29,7 +35,6 @@ class KeyPresserApp:
 
     def create_widgets(self):
         tk.Label(self.root, text="Key:").grid(row=0, column=0, sticky="nsew")
-        self.key_entry = tk.Entry(self.root)
         self.key_entry.grid(row=0, column=1, sticky="nsew")
 
         tk.Label(self.root, text="Interval (seconds):").grid(row=1, column=0, sticky="nsew")
@@ -38,16 +43,12 @@ class KeyPresserApp:
         tk.Label(self.root, text="Target Window Title:").grid(row=2, column=0, sticky="nsew")
         tk.Entry(self.root, textvariable=self.target_window_title).grid(row=2, column=1, sticky="nsew")
 
-        self.add_key_button = tk.Button(self.root, text="Add Key", command=self.add_key)
         self.add_key_button.grid(row=3, column=0, columnspan=2, sticky="nsew")
 
-        self.start_button = tk.Button(self.root, text="Start (F3)", command=self.start_pressing)
         self.start_button.grid(row=4, column=0, columnspan=2, sticky="nsew")
 
-        self.stop_button = tk.Button(self.root, text="Stop (F4)", command=self.stop_pressing)
         self.stop_button.grid(row=5, column=0, columnspan=2, sticky="nsew")
 
-        self.keys_listbox = tk.Listbox(self.root)
         self.keys_listbox.grid(row=6, column=0, columnspan=2, sticky="nsew")
 
         # Configure the grid to expand
@@ -66,18 +67,17 @@ class KeyPresserApp:
 
     def start_pressing(self):
         if not self.keys:
-            print("Please add at least one key first.")
+            print("Add at least one key first.")
             return
 
         if not self.target_window_title.get():
-            print("Please set a target window title first.")
+            print("Set a target window title first.")
             return
 
         if not self.is_running:
             self.is_running = True
-            self.thread = threading.Thread(target=self.press_keys)
             self.thread.start()
-            print("Started pressing")
+            print(f"Started pressing at interval {self.interval}")
 
     def stop_pressing(self):
         self.is_running = False
@@ -110,7 +110,7 @@ class KeyPresserApp:
 
 
 if __name__ == "__main__":
-    print(get_active_window_title())
+    # print(get_active_window_title()) Useful for finding your window title
     root = tk.Tk()
     app = KeyPresserApp(root)
     root.mainloop()
