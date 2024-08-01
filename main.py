@@ -97,7 +97,7 @@ class KeyPresserApp:
                 time.sleep(self.interval.get())
             else:
                 print("Not focused")
-                time.sleep(1)
+                time.sleep(0.5)
 
     def on_press(self, key):
         try:
