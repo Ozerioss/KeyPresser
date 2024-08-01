@@ -9,6 +9,8 @@ readme = "README.md"
 python = "3.10"
 tk = "^0.1.0"
 pynput = "^1.7.7"
+pygetwindow = "^0.0.9"
+pyautogui = "^0.9.54"
 
 
 [tool.poetry.group.dev.dependencies]

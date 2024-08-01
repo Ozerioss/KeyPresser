@@ -2,6 +2,12 @@ import tkinter as tk
 from pynput.keyboard import Controller, Listener, Key
 import threading
 import time
+import pygetwindow as gw
+
+
+def get_active_window_title():
+    active_window = gw.getActiveWindow()
+    return active_window.title if active_window else None
 
 
 class KeyPresserApp:
@@ -11,6 +17,7 @@ class KeyPresserApp:
 
         self.keys = []
         self.interval = tk.DoubleVar(value=1.0)
+        self.target_window_title = tk.StringVar(value="Path of Exile")
 
         self.create_widgets()
         self.is_running = False
@@ -28,20 +35,23 @@ class KeyPresserApp:
         tk.Label(self.root, text="Interval (seconds):").grid(row=1, column=0, sticky="nsew")
         tk.Entry(self.root, textvariable=self.interval).grid(row=1, column=1, sticky="nsew")
 
+        tk.Label(self.root, text="Target Window Title:").grid(row=2, column=0, sticky="nsew")
+        tk.Entry(self.root, textvariable=self.target_window_title).grid(row=2, column=1, sticky="nsew")
+
         self.add_key_button = tk.Button(self.root, text="Add Key", command=self.add_key)
-        self.add_key_button.grid(row=2, column=0, columnspan=2, sticky="nsew")
+        self.add_key_button.grid(row=3, column=0, columnspan=2, sticky="nsew")
 
         self.start_button = tk.Button(self.root, text="Start (F3)", command=self.start_pressing)
-        self.start_button.grid(row=3, column=0, columnspan=2, sticky="nsew")
+        self.start_button.grid(row=4, column=0, columnspan=2, sticky="nsew")
 
         self.stop_button = tk.Button(self.root, text="Stop (F4)", command=self.stop_pressing)
-        self.stop_button.grid(row=4, column=0, columnspan=2, sticky="nsew")
+        self.stop_button.grid(row=5, column=0, columnspan=2, sticky="nsew")
 
         self.keys_listbox = tk.Listbox(self.root)
-        self.keys_listbox.grid(row=5, column=0, columnspan=2, sticky="nsew")
+        self.keys_listbox.grid(row=6, column=0, columnspan=2, sticky="nsew")
 
         # Configure the grid to expand
-        for i in range(6):
+        for i in range(7):
             self.root.grid_rowconfigure(i, weight=1)
         self.root.grid_columnconfigure(0, weight=1)
         self.root.grid_columnconfigure(1, weight=1)
@@ -59,6 +69,10 @@ class KeyPresserApp:
             print("Please add at least one key first.")
             return
 
+        if not self.target_window_title.get():
+            print("Please set a target window title first.")
+            return
+
         if not self.is_running:
             self.is_running = True
             self.thread = threading.Thread(target=self.press_keys)
@@ -73,11 +87,17 @@ class KeyPresserApp:
 
     def press_keys(self):
         while self.is_running:
-            for key in self.keys:
-                self.keyboard.press(key)
-            for key in self.keys:
-                self.keyboard.release(key)
-            time.sleep(self.interval.get())
+            active_window = gw.getActiveWindow()
+            if active_window and self.target_window_title.get() in active_window.title:
+                for key in self.keys:
+                    self.keyboard.press(key)
+                print(f"pressing {self.keys} \n")
+                for key in self.keys:
+                    self.keyboard.release(key)
+                time.sleep(self.interval.get())
+            else:
+                print("Not focused")
+                time.sleep(1)
 
     def on_press(self, key):
         try:
@@ -90,6 +110,7 @@ class KeyPresserApp:
 
 
 if __name__ == "__main__":
+    print(get_active_window_title())
     root = tk.Tk()
     app = KeyPresserApp(root)
     root.mainloop()
