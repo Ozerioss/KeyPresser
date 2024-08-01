@@ -19,12 +19,6 @@ A Python GUI application that simulates key presses at regular intervals. The ke
 
 ### Steps
 
-1. Clone the repository:
-    ```sh
-    git clone https://github.com/yourusername/key_presser_app.git
-    cd key_presser_app
-    ```
-
 2. Install dependencies using Poetry:
     ```sh
     poetry install
