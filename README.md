@@ -52,6 +52,8 @@ A Python GUI application that simulates key presses at regular intervals. The ke
     - Use the F3 key to start and the F4 key to stop the key presser.
     
 
+![Screenshot](key_presser.png)
+
 ## Building the Executable
 
 2. Build the executable:
