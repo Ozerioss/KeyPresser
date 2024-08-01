@@ -12,13 +12,14 @@ def get_active_window_title():
 
 class KeyPresserApp:
     def __init__(self, root):
+        self.root = root
         self.thread = threading.Thread(target=self.press_keys)
         self.keys_listbox = tk.Listbox(self.root)
         self.stop_button = tk.Button(self.root, text="Stop (F4)", command=self.stop_pressing)
         self.start_button = tk.Button(self.root, text="Start (F3)", command=self.start_pressing)
         self.add_key_button = tk.Button(self.root, text="Add Key", command=self.add_key)
         self.key_entry = tk.Entry(self.root)
-        self.root = root
+
         self.root.title("Key Presser App")
 
         self.keys = []
