@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 from pynput.keyboard import Controller, Listener, Key
 import threading
 import time
@@ -23,14 +24,14 @@ class KeyPresserApp:
         self.root.title("Key Presser App")
 
         self.keys = []
-        self.interval = tk.DoubleVar(value=1.0)
+        self.interval = tk.DoubleVar(value=10.5)
         self.target_window_title = tk.StringVar(value="Path of Exile")
 
         self.create_widgets()
         self.is_running = False
         self.keyboard = Controller()
 
-        # Start the keyboard listener for shortcuts
+        # Keyboard listener
         self.listener = Listener(on_press=self.on_press)
         self.listener.start()
 
@@ -52,7 +53,7 @@ class KeyPresserApp:
 
         self.keys_listbox.grid(row=6, column=0, columnspan=2, sticky="nsew")
 
-        # Configure the grid to expand
+        # Expanding grid
         for i in range(7):
             self.root.grid_rowconfigure(i, weight=1)
         self.root.grid_columnconfigure(0, weight=1)
@@ -69,10 +70,13 @@ class KeyPresserApp:
     def start_pressing(self):
         if not self.keys:
             print("Add at least one key first.")
+            messagebox.showwarning("No no no", "Add at least one key first")
             return
 
         if not self.target_window_title.get():
             print("Set a target window title first.")
+            messagebox.showinfo("Just so you know", "You can set a target window so your macro will only run when it "
+                                                    "is focused. If you want it to be used everywhere, type *")
             return
 
         if not self.is_running:
@@ -89,11 +93,11 @@ class KeyPresserApp:
     def press_keys(self):
         while self.is_running:
             active_window = gw.getActiveWindow()
-            if active_window and self.target_window_title.get() == active_window.title:
-                for key in self.keys:
-                    self.keyboard.press(key)
+            if active_window and (self.target_window_title.get() == active_window.title or self.target_window_title.get()) == "*":
                 print(f"pressing {self.keys} \n")
                 for key in self.keys:
+                    self.keyboard.press(key)
+                    time.sleep(0.05)
                     self.keyboard.release(key)
                 time.sleep(self.interval.get())
             else:
