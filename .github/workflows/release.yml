@@ -21,8 +21,8 @@ jobs:
           pip install poetry
           poetry install --with dev
       - name: Build executable
-          run: |
-            poetry run pyinstaller --name key_presser_app --onefile src/main.py
+        run: |
+          poetry run pyinstaller --name key_presser_app --onefile src/main.py
       - name: Release asset
         run: |
           gh release upload ${{ github.event.release.tag_name }} dist/key_presser_app --clobber
