@@ -15,6 +15,12 @@ pyautogui = "^0.9.54"
 
 [tool.poetry.group.dev.dependencies]
 pyinstaller = "^6.9.0"
+flake8 = "^7.1.0"
+black = "^24.8.0"
+
+
+[tool.black]
+line-length = 111
 
 [build-system]
 requires = ["poetry-core"]

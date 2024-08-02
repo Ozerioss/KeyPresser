@@ -75,8 +75,11 @@ class KeyPresserApp:
 
         if not self.target_window_title.get():
             print("Set a target window title first.")
-            messagebox.showinfo("Just so you know", "You can set a target window so your macro will only run when it "
-                                                    "is focused. If you want it to be used everywhere, type *")
+            messagebox.showinfo(
+                "Just so you know",
+                "You can set a target window so your macro will only run when "
+                "it is focused. If you want it to be used everywhere, type *",
+            )
             return
 
         if not self.is_running:
@@ -86,14 +89,14 @@ class KeyPresserApp:
 
     def stop_pressing(self):
         self.is_running = False
-        if hasattr(self, 'thread'):
+        if hasattr(self, "thread"):
             self.thread.join()
         print("Stopped pressing")
 
     def press_keys(self):
         while self.is_running:
             active_window = gw.getActiveWindow()
-            if active_window and (self.target_window_title.get() == active_window.title or self.target_window_title.get()) == "*":
+            if self.target_window_title.get() == active_window.title or self.target_window_title.get() == "*":
                 print(f"pressing {self.keys} \n")
                 for key in self.keys:
                     self.keyboard.press(key)
