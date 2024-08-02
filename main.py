@@ -14,7 +14,8 @@ def get_active_window_title():
 class KeyPresserApp:
     def __init__(self, root):
         self.root = root
-        self.thread = threading.Thread(target=self.press_keys)
+        self.thread = None
+
         self.keys_listbox = tk.Listbox(self.root)
         self.stop_button = tk.Button(self.root, text="Stop (F4)", command=self.stop_pressing)
         self.start_button = tk.Button(self.root, text="Start (F3)", command=self.start_pressing)
@@ -84,13 +85,15 @@ class KeyPresserApp:
 
         if not self.is_running:
             self.is_running = True
+            self.thread = threading.Thread(target=self.press_keys)
             self.thread.start()
-            print(f"Started pressing at interval {self.interval}")
+            print(f"Started pressing at interval {self.interval.get()}")
 
     def stop_pressing(self):
         self.is_running = False
-        if hasattr(self, "thread"):
+        if self.thread is not None:
             self.thread.join()
+        self.thread = None
         print("Stopped pressing")
 
     def press_keys(self):
