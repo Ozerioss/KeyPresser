@@ -34,7 +34,7 @@ jobs:
         poetry run flake8 --count --select=E9,F63,F7,F82 --show-source --statistics
     - name: Build executable
       run: |
-        poetry run pyinstaller --name key_presser_app --onefile main.py
+        poetry run pyinstaller --name key_presser_app --onefile src/main.py
     - name: Upload executable
       uses: actions/upload-artifact@v4
       with:
