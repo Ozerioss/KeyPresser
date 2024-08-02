@@ -89,7 +89,7 @@ class KeyPresserApp:
     def press_keys(self):
         while self.is_running:
             active_window = gw.getActiveWindow()
-            if active_window and self.target_window_title.get() in active_window.title:
+            if active_window and self.target_window_title.get() == active_window.title:
                 for key in self.keys:
                     self.keyboard.press(key)
                 print(f"pressing {self.keys} \n")
