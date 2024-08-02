@@ -41,4 +41,4 @@ jobs:
         name: key_presser_app
         path: dist/key_presser_app
         if-no-files-found:
-          error: "Uploading failed. Can't find the build."
+          error: Uploading failed. Can't find the build.
