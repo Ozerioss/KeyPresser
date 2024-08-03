@@ -96,10 +96,17 @@ class KeyPresserApp:
         self.thread = None
         print("Stopped pressing")
 
+    def check_window(self, active_window):
+        if active_window:
+            return (self.target_window_title.get() == active_window.title) or self.is_any_window()
+
+    def is_any_window(self):
+        return self.target_window_title.get() == "*"
+
     def press_keys(self):
         while self.is_running:
             active_window = gw.getActiveWindow()
-            if self.target_window_title.get() == active_window.title or self.target_window_title.get() == "*":
+            if self.check_window(active_window):
                 print(f"pressing {self.keys} \n")
                 for key in self.keys:
                     self.keyboard.press(key)
